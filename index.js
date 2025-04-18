@@ -1,23 +1,33 @@
-'use strict'
+"use strict"
 
-const express = require('express')
+const express = require("express")
 
-const app = express();
+const app = express()
 
 const port = process.env.PORT || 9000
 
-// xu ly khi nguoi dung gui request toi web server
+// GOI HAM EVENT
+const envent = require('events')
+const { console } = require("inspector")
 
-app.get("/", (req, res) => {
+const eventEmitter = new envent.EventEmitter();
 
-    res.send('Chao ban nhe!!');
+eventEmitter.on('hetGio', xyLyThongBao);
 
+function xyLyThongBao(tb){
+    console.log(tb);
+}
+setTimeout(()=> {
+    eventEmitter.emit('hetGio', 'Het gio hoc roi ve thoi')
+}, 2000)
+
+eventEmitter.on('vaoLop', (thongBao) =>{
+    console.log(thongBao);
 })
 
-// khoi dong web server
+setTimeout(()=> {eventEmitter.emit('vaoLop','Hay vao lop hoc')},5000)
+//khoi dong web server
 
 app.listen(port, () => {
-
-    console.log(`server dang chay tren cong ${port}`);
-
-})
+  console.log(`server dang chay tren cong ${port}`);
+});
